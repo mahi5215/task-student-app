@@ -5,7 +5,7 @@ const StudentList = ({ onSelect }) => {
 
   // Fetch students from API
   useEffect(() => {
-    fetch('http://localhost:5000/students') 
+    fetch('https://mean-appp.onrender.com/students') 
       .then((response) => response.json())
       .then((data) => setStudents(data)) 
       .catch((error) => console.error('Error fetching students:', error));
