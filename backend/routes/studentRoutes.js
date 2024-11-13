@@ -14,6 +14,7 @@ router.get('/', async (req, res) => {
 
 // Add a new student
 router.post('/', async (req, res) => {
+  console.log('Request body:', req.body);
   try {
     const student = new Student(req.body);
     await student.save();
