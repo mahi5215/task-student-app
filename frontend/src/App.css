@@ -48,3 +48,218 @@
   background-color: #c3e6cb;
   color: #155724;
 }
+
+/* Search and Add Student Section */
+input[type="text"] {
+  width: 100%;
+  max-width: 350px; /* Set a maximum width for the text boxes */
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s;
+}
+
+/* Focus effect for input fields */
+input[type="text"]:focus {
+  border-color: #66afe9;
+  outline: none;
+}
+
+/* Add Student Button Styling */
+button {
+  padding: 10px 15px;
+  margin-top: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+/* Hover effect for Add Student button */
+button:hover {
+  background-color: #45a049;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Wrapper for input and button */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+input[type="text"]::placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+/* Dropdown container */
+.dropdown {
+  position: absolute;
+  width: calc(100% - 20px); /* Match input width */
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Dropdown item */
+.dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* Hover effect for dropdown item */
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* No students found */
+.dropdown-item:first-child {
+  color: #888;
+  font-style: italic;
+}
+/* Search and add container */
+.search-add-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between search and add form */
+  margin-bottom: 20px;
+}
+
+/* Search input styling */
+.search-container {
+  position: relative; /* To position dropdown correctly */
+}
+
+/* Input fields styling */
+.search-input,
+.add-input {
+  width: 100%;
+  max-width: 350px; /* Set maximum width for the text boxes */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+/* Button styling */
+.add-button {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 1em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover {
+  background-color: #0056b3;
+}
+
+/* Dropdown container */
+.dropdown {
+  position: absolute;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  margin-top: 5px;
+  padding: 0;
+  list-style: none;
+}
+
+/* Dropdown item */
+.dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* Hover effect for dropdown items */
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+/* Sorting buttons container */
+.sort-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Individual button styles */
+.sort-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sort-button:hover {
+  background-color: #0056b3;
+}
+/* AvailableStudents.css */
+.student-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sort-buttons {
+  margin-bottom: 10px;
+}
+
+.sort-button {
+  padding: 8px 15px;
+  margin-right: 5px;
+  font-size: 0.9em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sort-button:hover {
+  background-color: #0056b3;
+}
+
+.student-item {
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  background-color: #e8f0fe;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.student-item:hover {
+  background-color: #cfd8ff;
+}
