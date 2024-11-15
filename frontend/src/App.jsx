@@ -1,4 +1,3 @@
-// App.jsx
 import React, { useState, useEffect } from 'react';
 import AvailableStudents from './components/AvailableStudents';
 import SelectedStudents from './components/SelectedStudents';
@@ -11,87 +10,100 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [newStudentName, setNewStudentName] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch initial student list from the server
-    fetch('https://mean-appp.onrender.com/students')
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchStudents = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch('https://mean-appp.onrender.com/students');
+        if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
+        const data = await res.json();
         setStudents(data);
-        setFilteredStudents(data); // Initialize filtered list
-      })
-      .catch((err) => console.error('Error fetching students:', err));
+        setFilteredStudents(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStudents();
   }, []);
 
-  // Function to handle selecting a student
   const handleSelectStudent = (student) => {
     if (!selectedStudents.some((s) => s._id === student._id)) {
       setSelectedStudents((prev) => [...prev, student]);
     }
     setShowDropdown(false);
-    setSearchTerm(''); // Clear search field after selection
+    setSearchTerm('');
   };
 
-  // Function to handle search input change
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
     if (value.trim() === '') {
       setShowDropdown(false);
-      setFilteredStudents(students); // Reset to full list
+      setFilteredStudents(students);
     } else {
       const matches = students.filter((student) =>
         student.name.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredStudents(matches);
-      setShowDropdown(true);
+      setShowDropdown(matches.length > 0);
     }
   };
 
-  // Function to handle adding a new student
-  const handleAddStudent = (e) => {
+  const handleAddStudent = async (e) => {
     e.preventDefault();
     if (newStudentName.trim()) {
-      fetch('https://mean-appp.onrender.com/students', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newStudentName }),
-      })
-        .then((res) => res.json())
-        .then((newStudent) => {
-          setNewStudentName(''); // Clear the input field after adding
-          setStudents((prev) => [...prev, newStudent]); // Add the new student to the list
-          setFilteredStudents((prev) => [...prev, newStudent]); // Update filtered list
-        })
-        .catch((err) => console.error('Error adding student:', err));
+      try {
+        const res = await fetch('https://mean-appp.onrender.com/students', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: newStudentName }),
+        });
+        if (!res.ok) throw new Error('Failed to add student');
+        const newStudent = await res.json();
+        setStudents((prev) => [...prev, newStudent]);
+        setFilteredStudents((prev) => [...prev, newStudent]);
+        setNewStudentName('');
+      } catch (err) {
+        console.error('Error adding student:', err);
+      }
     }
   };
 
-  // Function to handle sorting available students A-Z
+  const sortStudents = (list, direction) =>
+    [...list].sort((a, b) =>
+      direction === 'asc'
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name)
+    );
+
   const handleSortAtoZ = () => {
-    const sorted = [...students].sort((a, b) => a.name.localeCompare(b.name));
+    const sorted = sortStudents(students, 'asc');
     setStudents(sorted);
-    setFilteredStudents(sorted); // Update filtered students list as well
+    setFilteredStudents(sorted);
   };
 
-  // Function to handle sorting available students Z-A
   const handleSortZtoA = () => {
-    const sorted = [...students].sort((a, b) => b.name.localeCompare(a.name));
+    const sorted = sortStudents(students, 'desc');
     setStudents(sorted);
-    setFilteredStudents(sorted); // Update filtered students list as well
+    setFilteredStudents(sorted);
   };
 
-  // Function to handle sorting selected students A-Z
   const handleSortSelectedAtoZ = () => {
-    const sortedSelected = [...selectedStudents].sort((a, b) => a.name.localeCompare(b.name));
-    setSelectedStudents(sortedSelected);
+    setSelectedStudents(sortStudents(selectedStudents, 'asc'));
   };
 
-  // Function to handle sorting selected students Z-A
   const handleSortSelectedZtoA = () => {
-    const sortedSelected = [...selectedStudents].sort((a, b) => b.name.localeCompare(a.name));
-    setSelectedStudents(sortedSelected);
+    setSelectedStudents(sortStudents(selectedStudents, 'desc'));
   };
+
+  if (loading) return <div>Loading students...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="container">
@@ -103,6 +115,7 @@ const App = () => {
             value={searchTerm}
             onChange={handleSearch}
             className="search-input"
+            aria-label="Search students"
           />
           {showDropdown && (
             <ul className="dropdown">
@@ -112,6 +125,7 @@ const App = () => {
                     key={student._id}
                     onClick={() => handleSelectStudent(student)}
                     className="dropdown-item"
+                    tabIndex={0}
                   >
                     {student.name}
                   </li>
@@ -130,12 +144,14 @@ const App = () => {
             value={newStudentName}
             onChange={(e) => setNewStudentName(e.target.value)}
             className="add-input"
+            aria-label="Add new student"
           />
-          <button type="submit" className="add-button">Add</button>
+          <button type="submit" className="add-button">
+            Add
+          </button>
         </form>
       </div>
 
-      {/* Render AvailableStudents component */}
       <AvailableStudents
         students={filteredStudents}
         onSelect={handleSelectStudent}
@@ -143,7 +159,6 @@ const App = () => {
         onSortZtoA={handleSortZtoA}
       />
 
-      {/* Render SelectedStudents component */}
       <SelectedStudents
         selectedStudents={selectedStudents}
         onSortAtoZ={handleSortSelectedAtoZ}
