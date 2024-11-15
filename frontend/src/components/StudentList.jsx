@@ -5,10 +5,20 @@ const StudentList = ({ onSelect }) => {
 
   // Fetch students from API
   useEffect(() => {
-    fetch('https://mean-appp.onrender.com/students') 
-      .then((response) => response.json())
-      .then((data) => setStudents(data)) 
-      .catch((error) => console.error('Error fetching students:', error));
+    const fetchStudents = async () => {
+      try {
+        const response = await fetch('https://mean-appp.onrender.com/students');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setStudents(data); // Update state with fetched data
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      }
+    };
+
+    fetchStudents();
   }, []);
 
   return (
